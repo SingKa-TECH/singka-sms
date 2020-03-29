@@ -1,0 +1,30 @@
+{
+    "name": "singka/singka-sms",
+    "description": "适用于ThinkPHP6.0的各种短信接口集成服务",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "宁波晟嘉网络科技有限公司 夏慧新",
+            "email": "shycomet@singka.email"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "alibabacloud/client": "^1.5",
+        "singka/ucloud-sms": "^1.8",
+        "qcloudsms/qcloudsms_php": "0.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SingKa\\Sms\\" : "src/"
+        }
+    },
+    "extra": {
+        "think": {
+            "config": {
+                "sms": "config/config.php"
+            }
+        }
+    }
+}
