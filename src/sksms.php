@@ -19,7 +19,6 @@ class sksms
 {
     protected $type;
     protected $config;
-    protected static $snakeCache = [];
 
     public function __construct($type,$config)
     {
@@ -35,7 +34,6 @@ class sksms
 
     public function __call($name, $arguments)
     {
-        $name = static::snake($name);
         if (empty($this->config['actions'][$name])) {
             $data['code'] = 104;
             $data['msg'] = '没有找到操作类型:'.$name;
@@ -56,22 +54,5 @@ class sksms
                 return $data;
             }
         }
-    }
-
-    public static function snake(string $value, string $delimiter = '_'): string
-    {
-        $key = $value;
-
-        if (isset(static::$snakeCache[$key][$delimiter])) {
-            return static::$snakeCache[$key][$delimiter];
-        }
-
-        if (!ctype_lower($value)) {
-            $value = preg_replace('/\s+/u', '', $value);
-
-            $value = mb_strtolower($value(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $value)), 'UTF-8');
-        }
-
-        return static::$snakeCache[$key][$delimiter] = $value;
     }
 }
