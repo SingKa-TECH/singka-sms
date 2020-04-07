@@ -83,5 +83,27 @@ return [
                 'template_id'  => '566200',
             ],
         ],
+    ],
+    'qiniu'       => [
+        'AccessKey'   =>  '',
+        'SecretKey'  =>  '',
+        'actions'       => [
+            'register'        => [
+                'actions_name'      => '注册验证',
+                'template_id'  => '1246849772845797376',
+            ],
+            'login'           => [
+                'actions_name'      => '登录验证',
+                'template_id'  => '1246849654881001472',
+            ],
+            'change_password' => [
+                'actions_name'      => '修改密码',
+                'template_id'  => '1246849964902977536',
+            ],
+            'change_userinfo' => [
+                'actions_name'      => '变更信息',
+                'template_id'  => '1246849860733243392',
+            ],
+        ],
     ]
 ];

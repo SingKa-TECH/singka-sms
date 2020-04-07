@@ -14,6 +14,7 @@ namespace singka\sms;
 use SingKa\Sms\Aliyun;
 use SingKa\Sms\Qcloud;
 use SingKa\Sms\Ucloud;
+use SingKa\Sms\Qiniu;
 
 class sksms
 {
@@ -41,12 +42,16 @@ class sksms
             exit();
         } else {
             if ($this->type == 'aliyun') {
-                return (new Aliyun($this->config))->send($name,$arguments);
+                $sms = new Aliyun($this->config);
+                return $sms->send($name,$arguments);
             } elseif ($this->type == 'qcloud') {
                 $sms = new Qcloud($this->config);
                 return $sms->send($name,$arguments);
             } elseif ($this->type == 'ucloud') {
                 $sms = new Ucloud($this->config);
+                return $sms->send($name,$arguments);
+            } elseif ($this->type == 'qiniu') {
+                $sms = new Qiniu($this->config);
                 return $sms->send($name,$arguments);
             } else {
                 $data['code'] = 102;

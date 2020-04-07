@@ -13,7 +13,8 @@
         "php": ">=7.0",
         "alibabacloud/client": "^1.5",
         "singka/ucloud-sms": "^1.8",
-        "qcloudsms/qcloudsms_php": "0.1.*"
+        "qcloudsms/qcloudsms_php": "0.1.*",
+        "qiniu/php-sdk": "^7.2"
     },
     "autoload": {
         "psr-4": {
