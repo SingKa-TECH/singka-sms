@@ -1,7 +1,7 @@
 # ThinkPHP6集成短信发送平台
 
 #### 介绍
-本项目是集成了各大云服务厂商的短信业务平台，支持ThinkPHP5.0、ThinkPHP5.1和ThinkPHP6.0，由宁波晟嘉网络科技有限公司维护，目前支持阿里云、腾讯云、七牛云和Ucloud，接下来将接入华为云等国内较大的公有云服务厂商。
+本项目是集成了各大云服务厂商的短信业务平台，支持ThinkPHP5.0、ThinkPHP5.1和ThinkPHP6.0，由宁波晟嘉网络科技有限公司维护，目前支持阿里云、腾讯云、七牛云、又拍云和Ucloud，接下来将接入华为云等国内较大的公有云服务厂商。
 
 #### 安装教程
 
@@ -9,7 +9,7 @@
 
 安装完成后会自动生成 `config/sms.php` 配置文件，内容如下：
 
-```
+```php
 <?php
 // +----------------------------------------------------------------------
 // | 胜家云 [ SingKa Cloud ]
@@ -117,6 +117,29 @@ return [
                 'template_id'  => '1246849860733243392',
             ],
         ],
+    ],
+    'upyun'       => [
+        'id'   =>  '',
+        'token'  =>  '',
+        'apiurl'  =>  '',
+        'actions'       => [
+            'register'        => [
+                'actions_name'      => '注册验证',
+                'template_id'  => '2591',
+            ],
+            'login'           => [
+                'actions_name'      => '登录验证',
+                'template_id'  => '2592',
+            ],
+            'change_password' => [
+                'actions_name'      => '修改密码',
+                'template_id'  => '2590',
+            ],
+            'change_userinfo' => [
+                'actions_name'      => '变更信息',
+                'template_id'  => '2589',
+            ],
+        ],
     ]
 ];
 ```
@@ -124,7 +147,7 @@ return [
 #### 使用示例（基于ThinkPHP6.0）
 
 
-```
+```php
 <?php
 // +----------------------------------------------------------------------
 // | 胜家云 [ SingKa Cloud ]
@@ -142,25 +165,27 @@ use think\facade\Config;
 
 class Index extends Base
 {
-		/**
-     * 短信发送示例
-     *
-     * @mobile  短信发送对象手机号码
-     * @action  短信发送场景，会自动传入短信模板
-     * @parme   短信内容数组
-     */
-		 public function sendSms($mobile,$action,$parme)
-  	 {
-  	 		//$this->SmsDefaultDriver是从数据库中读取的短信默认驱动
-  	 		$SmsDefaultDriver = $this->SmsDefaultDriver ?: 'aliyun'; 
-  	 		//$this->SmsConfig是从数据库中读取的短信配置
-  	 		$config = $this->SmsConfig ?: Config::get('sms.'.$SmsDefaultDriver);
+    /**
+    * 短信发送示例
+    *
+    * @mobile  短信发送对象手机号码
+    * @action  短信发送场景，会自动传入短信模板
+    * @parme   短信内容数组
+    */
+    public function sendSms($mobile,$action,$parme)
+    {
+        //$this->SmsDefaultDriver是从数据库中读取的短信默认驱动
+        $SmsDefaultDriver = $this->SmsDefaultDriver ?: 'aliyun'; 
+        //$this->SmsConfig是从数据库中读取的短信配置
+        $config = $this->SmsConfig ?: Config::get('sms.'.$SmsDefaultDriver);
         $sms = new sksms($SmsDefaultDriver,$config);//传入短信驱动和配置信息
         //判断短信发送驱动，非阿里云和七牛云，需将内容数组主键序号化
         if ($this->SmsDefaultDriver == 'aliyun') {
             $result = $sms->$action($mobile,$parme);
         } elseif ($this->SmsDefaultDriver == 'qiniu') {
             $result = $sms->$action([$mobile],$parme);
+        } elseif ($this->SmsDefaultDriver == 'upyun') {
+            $result = $sms->$action($mobile,implode('|',$this->restore_array($parme)));
         } else {
             $result = $sms->$action($mobile,$this->restore_array($parme));
         }
@@ -172,14 +197,15 @@ class Index extends Base
             $data['msg'] = $result['msg'];
         }
         return $data;
-  	}
+    }
   	
-  	/**
-     * 数组主键序号化
-     *
-     * @arr  需要转换的数组
-     */
-  	public function restore_array($arr){
+    /**
+    * 数组主键序号化
+    *
+    * @arr  需要转换的数组
+    */
+    public function restore_array($arr)
+    {
         if (!is_array($arr)){
             return $arr;
         }
@@ -198,5 +224,5 @@ class Index extends Base
 
 #### 其他说明
 
-返回的相关错误码请查阅：[Ucloud](https://docs.ucloud.cn/management_monitor/usms/error_code)、[阿里云](https://help.aliyun.com/document_detail/101346.html?spm=a2c4g.11186623.6.621.31fd2246LCMXWw)、[腾讯云](https://cloud.tencent.com/document/product/382/3771)、[七牛云](https://developer.qiniu.com/sms/api/5849/sms-error-code)
+返回的相关错误码请查阅：[Ucloud](https://docs.ucloud.cn/management_monitor/usms/error_code)、[阿里云](https://help.aliyun.com/document_detail/101346.html?spm=a2c4g.11186623.6.621.31fd2246LCMXWw)、[腾讯云](https://cloud.tencent.com/document/product/382/3771)、[七牛云](https://developer.qiniu.com/sms/api/5849/sms-error-code)、[又拍云](https://help.upyun.com/knowledge-base/sms-api-error-code/)
 

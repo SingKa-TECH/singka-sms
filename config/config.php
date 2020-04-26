@@ -105,5 +105,28 @@ return [
                 'template_id'  => '1246849860733243392',
             ],
         ],
+    ],
+    'upyun'       => [
+        'id'   =>  '',
+        'token'  =>  '',
+        'apiurl'  =>  '',
+        'actions'       => [
+            'register'        => [
+                'actions_name'      => '注册验证',
+                'template_id'  => '2591',
+            ],
+            'login'           => [
+                'actions_name'      => '登录验证',
+                'template_id'  => '2592',
+            ],
+            'change_password' => [
+                'actions_name'      => '修改密码',
+                'template_id'  => '2590',
+            ],
+            'change_userinfo' => [
+                'actions_name'      => '变更信息',
+                'template_id'  => '2589',
+            ],
+        ],
     ]
 ];
