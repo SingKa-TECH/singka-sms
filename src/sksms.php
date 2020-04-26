@@ -15,6 +15,7 @@ use SingKa\Sms\Aliyun;
 use SingKa\Sms\Qcloud;
 use SingKa\Sms\Ucloud;
 use SingKa\Sms\Qiniu;
+use SingKa\Sms\Upyun;
 
 class sksms
 {
@@ -52,6 +53,9 @@ class sksms
                 return $sms->send($name,$arguments);
             } elseif ($this->type == 'qiniu') {
                 $sms = new Qiniu($this->config);
+                return $sms->send($name,$arguments);
+            } elseif ($this->type == 'upyun') {
+                $sms = new Upyun($this->config);
                 return $sms->send($name,$arguments);
             } else {
                 $data['code'] = 102;
