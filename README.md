@@ -1,7 +1,7 @@
 # ThinkPHP6集成短信发送平台
 
 #### 介绍
-本项目是集成了各大云服务厂商的短信业务平台，支持ThinkPHP5.0、ThinkPHP5.1和ThinkPHP6.0，由宁波晟嘉网络科技有限公司维护，目前支持阿里云、腾讯云、七牛云、又拍云和Ucloud，接下来将接入华为云等国内较大的公有云服务厂商。
+本项目是集成了各大云服务厂商的短信业务平台，支持ThinkPHP5.0、ThinkPHP5.1和ThinkPHP6.0，由宁波晟嘉网络科技有限公司维护，目前支持阿里云、腾讯云、七牛云、又拍云、Ucloud和华为云，您如果有其他厂商的集成需求，请通过邮件联系作者提交需求。
 
 #### 安装教程
 
@@ -140,6 +140,30 @@ return [
                 'template_id'  => '2589',
             ],
         ],
+    ],
+    'huawei'       => [
+        'url'  =>  '',
+        'appKey'   =>  '',
+        'appSecret'  =>  '',
+        'sender'  =>  '',
+        'actions'       => [
+            'register'        => [
+                'actions_name'      => '注册验证',
+                'template_id'  => '2591',
+            ],
+            'login'           => [
+                'actions_name'      => '登录验证',
+                'template_id'  => '2592',
+            ],
+            'change_password' => [
+                'actions_name'      => '修改密码',
+                'template_id'  => '2590',
+            ],
+            'change_userinfo' => [
+                'actions_name'      => '变更信息',
+                'template_id'  => '2589',
+            ],
+        ],
     ]
 ];
 ```
@@ -160,10 +184,10 @@ return [
 // +----------------------------------------------------------------------
 namespace app\home\controller;
 
-use SingKa\Sms\sksms;
+use SingKa\Sms\SkSms;
 use think\facade\Config;
 
-class Index extends Base
+class Index
 {
     /**
     * 短信发送示例
@@ -172,7 +196,7 @@ class Index extends Base
     * @action  短信发送场景，会自动传入短信模板
     * @parme   短信内容数组
     */
-    public function sendSms($mobile,$action,$parme)
+    public function sendSms($mobile, $action, $parme)
     {
         //$this->SmsDefaultDriver是从数据库中读取的短信默认驱动
         $SmsDefaultDriver = $this->SmsDefaultDriver ?: 'aliyun'; 
@@ -185,9 +209,9 @@ class Index extends Base
         } elseif ($this->SmsDefaultDriver == 'qiniu') {
             $result = $sms->$action([$mobile],$parme);
         } elseif ($this->SmsDefaultDriver == 'upyun') {
-            $result = $sms->$action($mobile,implode('|',$this->restore_array($parme)));
+            $result = $sms->$action($mobile,implode('|',$this->restoreArray($parme)));
         } else {
-            $result = $sms->$action($mobile,$this->restore_array($parme));
+            $result = $sms->$action($mobile,$this->restoreArray($parme));
         }
         if ($result['code'] == 200) {
             $data['code'] = 200;
@@ -204,7 +228,7 @@ class Index extends Base
     *
     * @arr  需要转换的数组
     */
-    public function restore_array($arr)
+    public function restoreArray($arr)
     {
         if (!is_array($arr)){
             return $arr;
@@ -224,5 +248,10 @@ class Index extends Base
 
 #### 其他说明
 
-返回的相关错误码请查阅：[Ucloud](https://docs.ucloud.cn/management_monitor/usms/error_code)、[阿里云](https://help.aliyun.com/document_detail/101346.html?spm=a2c4g.11186623.6.621.31fd2246LCMXWw)、[腾讯云](https://cloud.tencent.com/document/product/382/3771)、[七牛云](https://developer.qiniu.com/sms/api/5849/sms-error-code)、[又拍云](https://help.upyun.com/knowledge-base/sms-api-error-code/)
+返回的相关错误码请查阅：[Ucloud](https://docs.ucloud.cn/management_monitor/usms/error_code)
+[阿里云](https://help.aliyun.com/document_detail/101346.html?spm=a2c4g.11186623.6.621.31fd2246LCMXWw)
+[腾讯云](https://cloud.tencent.com/document/product/382/3771)
+[七牛云](https://developer.qiniu.com/sms/api/5849/sms-error-code)
+[又拍云](https://help.upyun.com/knowledge-base/sms-api-error-code/)
+[华为云](https://support.huaweicloud.com/devg-msgsms/sms_04_0009.html)
 

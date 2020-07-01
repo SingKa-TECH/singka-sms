@@ -9,7 +9,7 @@
 // | Author: ShyComet <shycomet@qq.com>
 // +----------------------------------------------------------------------
 
-namespace singka\sms;
+namespace SingKa\Sms;
 
 class Upyun
 {

@@ -9,15 +9,16 @@
 // | Author: ShyComet <shycomet@qq.com>
 // +----------------------------------------------------------------------
 
-namespace singka\sms;
+namespace SingKa\Sms;
 
 use SingKa\Sms\Aliyun;
 use SingKa\Sms\Qcloud;
 use SingKa\Sms\Ucloud;
 use SingKa\Sms\Qiniu;
 use SingKa\Sms\Upyun;
+use SingKa\Sms\Huawei;
 
-class sksms
+class SkSms
 {
     protected $type;
     protected $config;
@@ -42,25 +43,35 @@ class sksms
             return $data;
             exit();
         } else {
-            if ($this->type == 'aliyun') {
-                $sms = new Aliyun($this->config);
-                return $sms->send($name,$arguments);
-            } elseif ($this->type == 'qcloud') {
-                $sms = new Qcloud($this->config);
-                return $sms->send($name,$arguments);
-            } elseif ($this->type == 'ucloud') {
-                $sms = new Ucloud($this->config);
-                return $sms->send($name,$arguments);
-            } elseif ($this->type == 'qiniu') {
-                $sms = new Qiniu($this->config);
-                return $sms->send($name,$arguments);
-            } elseif ($this->type == 'upyun') {
-                $sms = new Upyun($this->config);
-                return $sms->send($name,$arguments);
-            } else {
-                $data['code'] = 102;
-                $data['msg'] = 'type类型不存在';
-                return $data;
+            switch ($this->type) {
+                case 'aliyun':
+                    $sms = new Aliyun($this->config);
+                    return $sms->send($name, $arguments);
+                    break;
+                case 'qcloud':
+                    $sms = new Qcloud($this->config);
+                    return $sms->send($name, $arguments);
+                    break;
+                case 'ucloud':
+                    $sms = new Ucloud($this->config);
+                    return $sms->send($name, $arguments);
+                    break;
+                case 'qiniu':
+                    $sms = new Qiniu($this->config);
+                    return $sms->send($name, $arguments);
+                    break;
+                case 'upyun':
+                    $sms = new Upyun($this->config);
+                    return $sms->send($name, $arguments);
+                    break;
+                case 'huawei':
+                    $sms = new Huawei($this->config);
+                    return $sms->send($name, $arguments);
+                    break;
+                default:
+                    $data['code'] = 102;
+                    $data['msg'] = 'type类型不存在';
+                    return $data;
             }
         }
     }
