@@ -38,11 +38,11 @@ return [
                 'actions_name'      => '登录验证',
                 'template_id'  => 'SMS_53115057',
             ],
-            'change_password' => [
+            'changePassword' => [
                 'actions_name'      => '修改密码',
                 'template_id'  => 'SMS_53115053',
             ],
-            'change_userinfo' => [
+            'changeUserinfo' => [
                 'actions_name'      => '变更信息',
                 'template_id'  => 'SMS_53115052',
             ],
@@ -63,11 +63,11 @@ return [
                 'actions_name'      => '登录验证',
                 'template_id'  => 'UTA1910164E29F4',
             ],
-            'change_password' => [
+            'changePassword' => [
                 'actions_name'      => '修改密码',
                 'template_id'  => 'UTA1910164E29F4',
             ],
-            'change_userinfo' => [
+            'changeUserinfo' => [
                 'actions_name'      => '变更信息',
                 'template_id'  => 'UTA1910164E29F4',
             ],
@@ -86,11 +86,11 @@ return [
                 'actions_name'      => '登录验证',
                 'template_id'  => '566197',
             ],
-            'change_password' => [
+            'changePassword' => [
                 'actions_name'      => '修改密码',
                 'template_id'  => '566199',
             ],
-            'change_userinfo' => [
+            'changeUserinfo' => [
                 'actions_name'      => '变更信息',
                 'template_id'  => '566200',
             ],
@@ -108,11 +108,11 @@ return [
                 'actions_name'      => '登录验证',
                 'template_id'  => '1246849654881001472',
             ],
-            'change_password' => [
+            'changePassword' => [
                 'actions_name'      => '修改密码',
                 'template_id'  => '1246849964902977536',
             ],
-            'change_userinfo' => [
+            'changeUserinfo' => [
                 'actions_name'      => '变更信息',
                 'template_id'  => '1246849860733243392',
             ],
@@ -131,11 +131,11 @@ return [
                 'actions_name'      => '登录验证',
                 'template_id'  => '2592',
             ],
-            'change_password' => [
+            'changePassword' => [
                 'actions_name'      => '修改密码',
                 'template_id'  => '2590',
             ],
-            'change_userinfo' => [
+            'changeUserinfo' => [
                 'actions_name'      => '变更信息',
                 'template_id'  => '2589',
             ],
@@ -146,6 +146,8 @@ return [
         'appKey'   =>  '',
         'appSecret'  =>  '',
         'sender'  =>  '',
+        'signature'  =>  '',
+        'statusCallback'  =>  '',
         'actions'       => [
             'register'        => [
                 'actions_name'      => '注册验证',
@@ -155,11 +157,11 @@ return [
                 'actions_name'      => '登录验证',
                 'template_id'  => '2592',
             ],
-            'change_password' => [
+            'changePassword' => [
                 'actions_name'      => '修改密码',
                 'template_id'  => '2590',
             ],
-            'change_userinfo' => [
+            'changeUserinfo' => [
                 'actions_name'      => '变更信息',
                 'template_id'  => '2589',
             ],
@@ -202,16 +204,16 @@ class Index
         $SmsDefaultDriver = $this->SmsDefaultDriver ?: 'aliyun'; 
         //$this->SmsConfig是从数据库中读取的短信配置
         $config = $this->SmsConfig ?: Config::get('sms.'.$SmsDefaultDriver);
-        $sms = new sksms($SmsDefaultDriver,$config);//传入短信驱动和配置信息
+        $sms = new sksms($SmsDefaultDriver, $config);//传入短信驱动和配置信息
         //判断短信发送驱动，非阿里云和七牛云，需将内容数组主键序号化
         if ($this->SmsDefaultDriver == 'aliyun') {
-            $result = $sms->$action($mobile,$parme);
+            $result = $sms->$action($mobile, $parme);
         } elseif ($this->SmsDefaultDriver == 'qiniu') {
-            $result = $sms->$action([$mobile],$parme);
+            $result = $sms->$action([$mobile], $parme);
         } elseif ($this->SmsDefaultDriver == 'upyun') {
-            $result = $sms->$action($mobile,implode('|',$this->restoreArray($parme)));
+            $result = $sms->$action($mobile, implode('|', $this->restoreArray($parme)));
         } else {
-            $result = $sms->$action($mobile,$this->restoreArray($parme));
+            $result = $sms->$action($mobile, $this->restoreArray($parme));
         }
         if ($result['code'] == 200) {
             $data['code'] = 200;

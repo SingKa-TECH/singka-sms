@@ -38,8 +38,8 @@ class Huawei
                         'to' => $arguments[0],
                         'templateId' => $conf['template_id'],
                         'templateParas' => $arguments[1],
-                        'statusCallback' => '',
-                        'signature' => $this->config['sign_name']
+                        'statusCallback' => $this->config['statusCallback'],
+                        'signature' => $this->config['signature']
                     ],
                     'headers' => [
                         'Authorization' => 'WSSE realm="SDP",profile="UsernameToken",type="Appkey"',
