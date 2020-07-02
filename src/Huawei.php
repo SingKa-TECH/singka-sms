@@ -32,7 +32,7 @@ class Huawei
             $client = new Client();
             $conf = $this->config['actions'][$name];
             try {
-                $response = $client->request('POST', $this->config['url'], [
+                $response = $client->request('POST', $this->config['url'].'/sms/batchSendSms/v1', [
                     'form_params' => [
                         'from' => $this->config['sender'],
                         'to' => $arguments[0],
