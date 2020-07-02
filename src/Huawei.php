@@ -10,6 +10,9 @@
 // +----------------------------------------------------------------------
 
 namespace SingKa\Sms;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Huawei
 {
